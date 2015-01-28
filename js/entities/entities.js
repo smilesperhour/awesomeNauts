@@ -41,8 +41,9 @@ game.PlayerEntity = me.Entity.extend({
 			}else{
 			this.body.vel.x = 0;
 		}
-		if(!this.body.vel.x !== 0){
-			if (!this.renderable.isCurrentAnimation("walk")) {
+
+		if(this.body.vel.x !== 1){
+			if (!this.renderable.isCurrentAnimation("walk")){
 				this.renderable.setCurrentAnimation("walk");
 }			//sets player to idle or zero when not moving
 			}else{
