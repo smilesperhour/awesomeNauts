@@ -34,6 +34,7 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x += this.body.accel.x * me.timer.tick;
 			this.flipX(true);
 		}
+		//allows player to move left
 		else if (me.input.isKeyPressed("left")){
 				this.body.vel.x -= this.body.accel.x * me.timer.tick;
 				this.flipX(false);
@@ -43,13 +44,13 @@ game.PlayerEntity = me.Entity.extend({
 		if(!this.body.vel.x !== 0){
 			if (!this.renderable.isCurrentAnimation("walk")) {
 				this.renderable.setCurrentAnimation("walk");
-}
+}			//sets player to idle or zero when not moving
 			}else{
 				this.renderable.setCurrentAnimation("idle");
 			}
 		
 		this.body.update(delta);
-
+		//it is updating the code so the animations run smooth
 		this._super(me.Entity, "update", [delta]);
 		return true;
 	}
