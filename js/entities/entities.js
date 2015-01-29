@@ -104,6 +104,7 @@ game.PlayerEntity = me.Entity.extend({
 		//allows player to move left
 		else if (me.input.isKeyPressed("left")){
 				this.body.vel.x -= this.body.accel.x * me.timer.tick;
+				//filp x allows the player to turn the oppisite side of the orc sprites.
 				this.flipX(false);
 			}else{
 			this.body.vel.x = 0;
