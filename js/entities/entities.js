@@ -4,14 +4,14 @@
 // this._super means reaching to the constructor of the entity
 // spriteheight and spritewidth are telling us what the size of the image is.
 // new me.Rect is the rectangle the player can walk into
-game.playerBaseEntity = me.Entity.extend({
+game.PlayerBaseEntity = me.Entity.extend({
 	init: function(x, y, settings){
 		this._super(me.Entity, 'init', [x, y, {
-			image: "tower";
+			image: "tower",
 			width: 100,
 			height: 100,
-			spritewidth: "100";
-			sprtiteheight: "100";
+			spritewidth: "100",
+			sprtiteheight: "100",
 			getShape: function() {
 				return (new me.Rect(0, 0, 100, 100)).toPolygon();
 			}
@@ -22,10 +22,16 @@ game.playerBaseEntity = me.Entity.extend({
 		this.body.onCollision = this.onCollision.bind(this);
 
 		this.type = "playerBaseEntity";
+
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
+		this.renderable.setCurrentAnimation("idle");
 	},
 	update:function(delta){
 		if (this.health<=0) {
 			this.broken = true;
+			this.renderable.addAnimation("broken");
+
 		}
 		this.body.update(delta);
 		this._super(me.Entity, "update", [delta]);
@@ -40,11 +46,11 @@ game.playerBaseEntity = me.Entity.extend({
 game.EnemyBaseEntity = me.Entity.extend({
 	init: function(x, y, settings){
 		this._super(me.Entity, 'init', [x, y, {
-			image: "tower";
+			image: "tower",
 			width: 100,
 			height: 100,
-			spritewidth: "100";
-			sprtiteheight: "100";
+			spritewidth: "100",
+			sprtiteheight: "100",
 			getShape: function() {
 				return (new me.Rect(0, 0, 100, 100)).toPolygon();
 			}
@@ -55,10 +61,16 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.body.onCollision = this.onCollision.bind(this);
 
 		this.type = "EnemyBaseEntity";
+
+
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
+		this.renderable.setCurrentAnimation("idle");
 	},
 	update:function(delta){
 		if (this.health<=0) {
 			this.broken = true;
+			this.renderable.addAnimation("broken");
 		}
 		this.body.update(delta);
 		this._super(me.Entity, "update", [delta]);
@@ -86,6 +98,7 @@ game.PlayerEntity = me.Entity.extend({
 		}]);
 
 		this.body.setVelocity(5, 20);
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);	
 		
 		this.renderable.addAnimation("idle", [78]);
 		this.renderable.addAnimation("walk",[117, 118, 119 ,120, 121, 122, 123 , 124 , 125], 80);
