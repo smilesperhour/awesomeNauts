@@ -23,12 +23,15 @@ game.PlayerBaseEntity = me.Entity.extend({
 
 		this.type = "playerBaseEntity";
 
+		//sets the towers to not be on fire from the start
+		//also allows it to swtich to an on fire tower when attacked
 		this.renderable.addAnimation("idle", [0]);
 		this.renderable.addAnimation("broken", [1]);
 		this.renderable.setCurrentAnimation("idle");
 	},
 	update:function(delta){
 		if (this.health<=0) {
+			//sets the tower to an on fire position
 			this.broken = true;
 			this.renderable.addAnimation("broken");
 
@@ -62,7 +65,8 @@ game.EnemyBaseEntity = me.Entity.extend({
 
 		this.type = "EnemyBaseEntity";
 
-
+		//sets the towers to not be on fire from the start
+		//also allows it to swtich to an on fire tower when attacked
 		this.renderable.addAnimation("idle", [0]);
 		this.renderable.addAnimation("broken", [1]);
 		this.renderable.setCurrentAnimation("idle");
@@ -70,6 +74,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 	update:function(delta){
 		if (this.health<=0) {
 			this.broken = true;
+			//sets the tower to an on fire position 
 			this.renderable.addAnimation("broken");
 		}
 		this.body.update(delta);
@@ -98,6 +103,7 @@ game.PlayerEntity = me.Entity.extend({
 		}]);
 
 		this.body.setVelocity(5, 20);
+		//makes the screen follow the player on both axis x and y
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);	
 		
 		this.renderable.addAnimation("idle", [78]);
@@ -117,7 +123,7 @@ game.PlayerEntity = me.Entity.extend({
 		//allows player to move left
 		else if (me.input.isKeyPressed("left")){
 				this.body.vel.x -= this.body.accel.x * me.timer.tick;
-				//filp x allows the player to turn the oppisite side of the orc sprites.
+		//filp x allows the player to turn the oppisite side of the orc sprites.
 				this.flipX(false);
 			}else{
 			this.body.vel.x = 0;
