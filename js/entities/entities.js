@@ -13,7 +13,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			sprtiteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100, 100)).toPolygon();
+				return (new me.Rect(0, 0, 100, 70)).toPolygon();
 			}
 		}]);
 		this.broken = false;
@@ -21,7 +21,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 		this.alwaysUpdate = true;
 		this.body.onCollision = this.onCollision.bind(this);
 
-		this.type = "playerBaseEntity";
+		this.type = "PlayerBase";
 
 		//sets the towers to not be on fire from the start
 		//also allows it to swtich to an on fire tower when attacked
@@ -55,7 +55,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			sprtiteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100, 100)).toPolygon();
+				return (new me.Rect(0, 0, 100, 70)).toPolygon();
 			}
 		}]);
 		this.broken = false;
@@ -63,7 +63,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.alwaysUpdate = true;
 		this.body.onCollision = this.onCollision.bind(this);
 
-		this.type = "EnemyBaseEntity";
+		this.type = "EnemyBase";
 
 		//sets the towers to not be on fire from the start
 		//also allows it to swtich to an on fire tower when attacked
@@ -127,6 +127,13 @@ game.PlayerEntity = me.Entity.extend({
 				this.flipX(false);
 			}else{
 			this.body.vel.x = 0;
+		}
+
+		if(me.input.isKeyPressed("jump")){
+			if(!this.body.jumping && !this.body.falling){
+				this.body.jumping = true;
+				this.body.vel.y -= this.body.accel.y * me.timer.tick;
+			}
 		}
 
 

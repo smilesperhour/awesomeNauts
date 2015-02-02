@@ -40,6 +40,8 @@ var game = {
 	// Run on game resources loaded.
 	"loaded" : function () {
 		me.pool.register("player", game.PlayerEntity, true);
+		me.pool.register("PlayerBase", game.PlayerBaseEntity, true);
+		me.pool.register("EnemyBase", game.EnemyBaseEntity, true);
 		// POOL is a technique that might speed up the game if used properly
 
 		me.state.set(me.state.MENU, new game.TitleScreen());
