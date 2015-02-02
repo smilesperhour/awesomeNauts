@@ -128,7 +128,7 @@ game.PlayerEntity = me.Entity.extend({
 			}else{
 			this.body.vel.x = 0;
 		}
-
+		//allows the player to jump
 		if(me.input.isKeyPressed("jump")){
 			if(!this.body.jumping && !this.body.falling){
 				this.body.jumping = true;
