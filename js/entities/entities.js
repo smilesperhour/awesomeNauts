@@ -120,6 +120,7 @@ game.PlayerEntity = me.Entity.extend({
 		}]);
 
 		this.body.setVelocity(5, 20);
+		//keeps track of which direction your player is moving
 		this.facing = "right";
 
 		//makes the screen follow the player on both axis x and y
