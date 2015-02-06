@@ -25,11 +25,15 @@ game.PlayerEntity = me.Entity.extend({
 		//choosing a velocity for the player
 		//moving 5 units to the right
 		//y is 20 so character is on the floor
+		//me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); makes it so the character is always being followed on the screen
 		this.body.setVelocity(5, 20);
 		this.facing = "right";
+		this.now = new Date().getTime();
+		this.lastHit = this.now;
+		this.lastAttack = new Date().getTime(); //haven't used this
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
-		//this.renderable.addAnimation adds animation using the pictures
+		//this.renderable.addAnimation adds animation(makes your character look like its walking standing or attacking) using the pictures
 		//80 miliseconds is the speed you go through each picture
 		//the number is what picture from orcSpear.png the program uses
 		this.renderable.addAnimation("idle", [78]);
@@ -41,6 +45,7 @@ game.PlayerEntity = me.Entity.extend({
 	},
 
 	update: function(delta){
+		this.now = new Date().getTime();
 		//checking if the right key is pressed
 		if(me.input.isKeyPressed("right")){
 			//if the key is pressed this is what happens
@@ -68,8 +73,22 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.y -= this.body.accel.y * me.timer.tick;
 		} 
 
+		//checking if attack is pressed
+		if(me.input.isKeyPressed("attack")){
+			//runs if your not attacking
+			if(!this.renderable.isCurrentAnimation("attack")){
+				//sets the current animation to attack and once that is over
+				//goes back to the idle animation
+				console.log(!this.renderable.isCurrentAnimation("attack"));
+				this.renderable.setCurrentAnimation("attack", "idle");
+				//makes it so that the next time we start the animation this sequence we begin
+				//from the first animation, not wherever we left off when we
+				//switched to another animation
+				this.renderable.setAnimationFrame();
+			}
+		}
 		//this will run only if the character is moving
-		if(this.body.vel.x !== 0){
+		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")){
 			//this if statement checks what happening with the character
 			////if its not moving it'll walk
 			//if it isnt it'll walk
@@ -77,16 +96,9 @@ game.PlayerEntity = me.Entity.extend({
 				this.renderable.setCurrentAnimation("walk");
 			}
 		}
-		else if(me.input.isKeyPressed("attack")){
-			if(!this.renderable.isCurrentAnimation("attack")){
-				console.log(!this.renderable.isCurrentAnimation("attack"));
-				this.renderable.setCurrentAnimation("attack", "idle");
-				this.renderable.setAnimationFrame();
-			}
-		}
 		//this will run if the velocity is not 0
 		//this will make the walking stop
-		else{
+		else if(!this.renderable.isCurrentAnimation("attack")){
 			this.renderable.setCurrentAnimation("idle");
 		}
 
@@ -107,15 +119,24 @@ game.PlayerEntity = me.Entity.extend({
 			var ydif = this.pos.y - response.b.pos.y;
 			var xdif = this.pos.x - response.b.pos.x;
 
-			console.log("xdif " + xdif + " ydif " + ydif);
-
-			if(xdif>-35 && this.facing==='right' && (xdif<0)){
+			if(ydif<-40 && xdif< 70 && xdif>-35){
+				this.body.falling = false;
+				this.body.vel.y = -1;
+			}
+			else if(xdif>-35 && this.facing==='right' && (xdif<0)){
 				this.body.vel.x = 0;
 				this.pos.x = this.pos.x -1;
-			}else if (xdif<70 && this.facing==='left' && (xdif>0)){
+			}
+			else if(xdif<70 && this.facing==='left' && xdif>0){
 				this.body.vel.x = 0;
 				this.pos.x = this.pos.x +1;
 			}
+
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >=1000){
+				this.lastHit = this.now;
+				response.b.loseHealth();
+			}
+
 		}
 	}
 });
@@ -149,6 +170,9 @@ game.PlayerBaseEntity = me.Entity.extend({
 		//the type allows you to use it when doing other collisions and you can check what your running into
 		this.type = "PlayerBaseEntity";
 
+		//0 because is the not burning animation
+		//1 is another animation
+		//this.renderable.setCurrentAnimation("idle"); sets the animation when the tower is broken
 		this.renderable.addAnimation("idle", [0]);
 		this.renderable.addAnimation("broken", [1]);
 		this.renderable.setCurrentAnimation("idle");
@@ -199,6 +223,9 @@ game.EnemyBaseEntity = me.Entity.extend({
 
 		this.type = "EnemyBaseEntity";
 
+		//0 because is the not burning animation
+		//1 is another animation
+		//this.renderable.setCurrentAnimation("idle"); sets the animation when the tower is broken
 		this.renderable.addAnimation("idle", [0]);
 		this.renderable.addAnimation("broken", [1]);
 		this.renderable.setCurrentAnimation("idle");
@@ -216,8 +243,14 @@ game.EnemyBaseEntity = me.Entity.extend({
 		return true;
 	},
 
+	
+
 	onCollision: function(){
 
+	},
+
+	loseHealth: function(){
+		this.health--;
 	}
 
 });
