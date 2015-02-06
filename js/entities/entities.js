@@ -243,7 +243,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 		return true;
 	},
 
-	
+
 
 	onCollision: function(){
 
@@ -254,3 +254,34 @@ game.EnemyBaseEntity = me.Entity.extend({
 	}
 
 });
+
+	game.EnemyCreep = me.Entity.extend({
+		init: function(x, y, settings){
+			this._super(me.Entity, 'init', [x, y, {
+				image: "creep1",
+				width : 32,
+				height : 64,
+				spritewidth : "32",
+				spriteheight : "64",
+				getShape: function(){
+				return (new me.Rect (0, 0, 32, 64)).toPolygon();
+			}
+			}]);
+
+			this.health = 10;
+			this.awlwaysUpdate = true;
+
+			this.setVelocity(3, 20);
+
+			this.type = "EnemyCreep";
+
+			this.renderable.addAnimation("walk", [3, 4, 5], 80);
+			this.renderable.setCurrentAnimation("walk");
+
+
+		},
+	update: function(){
+
+	}
+
+	});

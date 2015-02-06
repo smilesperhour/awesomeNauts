@@ -43,6 +43,7 @@ var game = {
 		me.pool.register("PlayerBase", game.PlayerBaseEntity, true);
 		me.pool.register("EnemyBase", game.EnemyBaseEntity, true);
 		// POOL is a technique that might speed up the game if used properly
+		me.pool.register("EnemyCreep", game.EnemyCreep, true);
 
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
