@@ -1,101 +1,118 @@
-// BASIC PLAYER CLASS
-// init: function is our function constructor
-// init: function initializes player
-// this._super means reaching to the constructor of the entity
-// spriteheight and spritewidth are telling us what the size of the image is.
-// new me.Rect is the rectangle the player can walk into
-game.PlayerBaseEntity = me.Entity.extend({
+//this is a class
+//game.PlayerEntity is a class that is why there both capital
+//me.Entity is a class
+game.PlayerEntity = me.Entity.extend({
+	//this is a constructer function
+	//melon js uses this contructer on most things for setutp
+	//you need x y and settings
+	//you're initializing the basic guy
+	//super is reaching into the constructer of me.Entity you need settings
+	//getShape function is returning a rectangle shape
+	//the numbers of the width and height of the box
+	//polygon is a method 
 	init: function(x, y, settings){
 		this._super(me.Entity, 'init', [x, y, {
-			image: "tower",
-			width: 100,
-			height: 100,
-			spritewidth: "100",
-			sprtiteheight: "100",
-			getShape: function() {
-				return (new me.Rect(0, 0, 100, 70)).toPolygon();
+			image: "player", 
+			width: 64,
+			height: 64,
+			spritewidth: "64",
+			spriteheight: "64",
+			getShape: function(){
+				return(new me.Rect(0, 0, 64, 64)).toPolygon();
 			}
 		}]);
-		this.broken = false;
-		this.health = 10;
-		this.alwaysUpdate = true;
-		this.body.onCollision = this.onCollision.bind(this);
 
-		this.type = "PlayerBase";
+		//choosing a velocity for the player
+		//moving 5 units to the right
+		//y is 20 so character is on the floor
+		this.body.setVelocity(5, 20);
+		this.facing = "right";
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
-		//sets the towers to not be on fire from the start
-		//also allows it to swtich to an on fire tower when attacked
-		this.renderable.addAnimation("idle", [0]);
-		this.renderable.addAnimation("broken", [1]);
+		//this.renderable.addAnimation adds animation using the pictures
+		//80 miliseconds is the speed you go through each picture
+		//the number is what picture from orcSpear.png the program uses
+		this.renderable.addAnimation("idle", [78]);
+		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);
+		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
+
+		//this is the animation it starts at (facing the screen)
 		this.renderable.setCurrentAnimation("idle");
 	},
-	update:function(delta){
-		if (this.health<=0) {
-			//sets the tower to an on fire position
-			this.broken = true;
-			this.renderable.addAnimation("broken");
 
+	update: function(delta){
+		//checking if the right key is pressed
+		if(me.input.isKeyPressed("right")){
+			//if the key is pressed this is what happens
+			//adds the position of my x by the velocity defined above in
+			//setVelocity() and multiplying it by me.timer.tick
+			//me.timer.tick makes the movement look smooth
+			this.body.vel.x += this.body.accel.x * me.timer.tick;
+			//this is so the character faces the right when moving to the right (if this isnt here the character faces the left when walking to the right)
+			this.facing = "right";
+			this.flipX(true);
 		}
-		this.body.update(delta);
-		this._super(me.Entity, "update", [delta]);
-		return true;
-	},
-	onCollision: function(){
+		//if you stop pressing the right key
+		else if (me.input.isKeyPressed("left")){
+			this.facing = "left";
+			this.body.vel.x -=this.body.accel.x * me.timer.tick;
+			this.flipX(false);
+		}
+		else{
+			//it wont move
+			this.body.vel.x = 0;
+		}
 
-	}
-});
+		if(me.input.isKeyPressed("jump") && !this.body.falling && !this.body.jumping){
+			this.body.jumping = true;
+			this.body.vel.y -= this.body.accel.y * me.timer.tick;
+		} 
 
-
-game.EnemyBaseEntity = me.Entity.extend({
-	init: function(x, y, settings){
-		this._super(me.Entity, 'init', [x, y, {
-			image: "tower",
-			width: 100,
-			height: 100,
-			spritewidth: "100",
-			sprtiteheight: "100",
-			getShape: function() {
-				return (new me.Rect(0, 0, 100, 70)).toPolygon();
+		//this will run only if the character is moving
+		if(this.body.vel.x !== 0){
+			//this if statement checks what happening with the character
+			////if its not moving it'll walk
+			//if it isnt it'll walk
+			if(!this.renderable.isCurrentAnimation("walk")){
+				this.renderable.setCurrentAnimation("walk");
 			}
-		}]);
-		this.broken = false;
-		this.health = 10;
-		this.alwaysUpdate = true;
-		this.body.onCollision = this.onCollision.bind(this);
-
-		this.type = "EnemyBase";
-
-		//sets the towers to not be on fire from the start
-		//also allows it to swtich to an on fire tower when attacked
-		this.renderable.addAnimation("idle", [0]);
-		this.renderable.addAnimation("broken", [1]);
-		this.renderable.setCurrentAnimation("idle");
-	},
-	update:function(delta){
-		if (this.health<=0) {
-			this.broken = true;
-			//sets the tower to an on fire position 
-			this.renderable.addAnimation("broken");
 		}
+		else if(me.input.isKeyPressed("attack")){
+			if(!this.renderable.isCurrentAnimation("attack")){
+				console.log(!this.renderable.isCurrentAnimation("attack"));
+				this.renderable.setCurrentAnimation("attack", "idle");
+				this.renderable.setAnimationFrame();
+			}
+		}
+		//this will run if the velocity is not 0
+		//this will make the walking stop
+		else{
+			this.renderable.setCurrentAnimation("idle");
+		}
+
 
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		//delta is the change of time its happened
 		this.body.update(delta);
+
+
+		//calling the parent class
+		//this is updating the super class so the animations can update
 		this._super(me.Entity, "update", [delta]);
 		return true;
-	},
-	onCollision: function(){
-		
 	},
 
 	collideHandler: function(response){
 		if(response.b.type==='EnemyBaseEntity'){
 			var ydif = this.pos.y - response.b.pos.y;
-			var xdif = this.pos.x -response.b.pos.x;
+			var xdif = this.pos.x - response.b.pos.x;
 
-			if(xdif>-35 && this.facing==='right' && (xdif<0)) {
+			console.log("xdif " + xdif + " ydif " + ydif);
+
+			if(xdif>-35 && this.facing==='right' && (xdif<0)){
 				this.body.vel.x = 0;
 				this.pos.x = this.pos.x -1;
-			}else if(xdif<70 && this.facing==='left' && (xdif>0)){
+			}else if (xdif<70 && this.facing==='left' && (xdif>0)){
 				this.body.vel.x = 0;
 				this.pos.x = this.pos.x +1;
 			}
@@ -103,87 +120,104 @@ game.EnemyBaseEntity = me.Entity.extend({
 	}
 });
 
-
-
-
-game.PlayerEntity = me.Entity.extend({
-	init: function(x, y, settings){
+//this is a class
+//making a constructor with ._super
+//setting the picture and size
+//getShape is returning a rectangle
+//toPolygon is there so you can use it
+game.PlayerBaseEntity = me.Entity.extend({
+	init : function (x, y, settings){
 		this._super(me.Entity, 'init', [x, y, {
-			image: "player",
-			width: 64,
-			height: 64,
-			sprtiteheight: "64",
-			spritewidth: "64",
-			getShape: function() {
-				return(new me.Rect(0, 0, 64, 64)).toPolygon();
+			image : "tower",
+			width : 100,
+			height : 100,
+			spritewidth : "100",
+			spriteheight : "100",
+			getShape: function(){
+				return (new me.Rect (0, 0, 70, 70)).toPolygon();
 			}
 		}]);
+		//this variable is saying the tower isnt broken
+		this.broken = false;
+		//this variable is setting the health to 10
+		this.health = 10;
+		//this variable is saying it'll always update whether or not your looking at it
+		this.alwaysUpdate = true;
+		//this variable is so if somebody runs into the tower you can collide with it
+		this.body.onCollision = this.onCollision.bind(this);
 
-		this.body.setVelocity(5, 20);
-		//keeps track of which direction your player is moving
-		this.facing = "right";
+		//the type allows you to use it when doing other collisions and you can check what your running into
+		this.type = "PlayerBaseEntity";
 
-		//makes the screen follow the player on both axis x and y
-		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);	
-		
-		this.renderable.addAnimation("idle", [78]);
-		this.renderable.addAnimation("walk",[117, 118, 119 ,120, 121, 122, 123 , 124 , 125], 80);
-		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
 		this.renderable.setCurrentAnimation("idle");
 	},
 
-	update: function(delta){
-		if (me.input.isKeyPressed("right")){
-			//adds to the position of my x by the velocity defined above in
-			//setVelocity() and multiplying it by me.timer.tick.
-			//me.timer.tick makes the movement look smooth
-			this.facing = "right";
-			this.body.vel.x += this.body.accel.x * me.timer.tick;
-			this.flipX(true);
+
+	update:function(delta) {
+		//this runs when the health is less than or equal to zero
+		if(this.health<=0){
+			//if its true your character is dead 
+			this.broken = true;
+			this.renderable.setCurrentAnimation("broken");
 		}
-		//allows player to move left
-		else if (me.input.isKeyPressed("left")){
-				this.body.vel.x -= this.body.accel.x * me.timer.tick;
-				this.facing = "left";
-		//filp x allows the player to turn the oppisite side of the orc sprites.
-				this.flipX(false);
-			}else{
-			this.body.vel.x = 0;
-		}
-		//allows the player to jump
-		if(me.input.isKeyPressed("jump")){
-			if(!this.body.jumping && !this.body.falling){
-				this.body.jumping = true;
-				this.body.vel.y -= this.body.accel.y * me.timer.tick;
-			}
-		}
-
-
-		if (me.input.isKeyPressed("attack")){
-			if (!this.renderable.isCurrentAnimation("attack")){
-				//sets the current animation to attack and oce that
-				//is over it goes back to the idle position.
-				this.renderable.setCurrentAnimation("attack", "idle");
-				//makes it so that the next time we start this sequence we begin
-				//from the first animation, not wherever we left off when we
-				//switched to another animation.
-				this.renderable.setAnimationFrame();
-			}
-		}
-
-
-		else if(this.body.vel.x !== 0){
-			if (!this.renderable.isCurrentAnimation("walk")){
-				 this.renderable.setCurrentAnimation("walk");
-}			//sets player to idle or zero when not moving
-			}else{
-				this.renderable.setCurrentAnimation("idle");
-			}
-
+		//then it updates delta (the time)
 		this.body.update(delta);
-		//it is updating the code so the animations run smooth
+
+		//calling the super
+		//updating and returning
 		this._super(me.Entity, "update", [delta]);
 		return true;
+	},
+
+	//for colliding 
+	onCollision: function(){
+
+	}
+
+});
+
+//this is a class for the enemy base
+//almost the same the class above
+game.EnemyBaseEntity = me.Entity.extend({
+	init : function (x, y, settings){
+		this._super(me.Entity, 'init', [x, y, {
+			image : "tower",
+			width : 100,
+			height : 100,
+			spritewidth : "100",
+			spriteheight : "100",
+			getShape: function(){
+				return (new me.Rect (0, 0, 70, 70)).toPolygon();
+			}
+		}]);
+		this.broken = false;
+		this.health = 10;
+		this.alwaysUpdate = true;
+		this.body.onCollision = this.onCollision.bind(this);
+
+		this.type = "EnemyBaseEntity";
+
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
+		this.renderable.setCurrentAnimation("idle");
+
+	},
+
+	update:function(delta) {
+		if(this.health<=0){
+			this.broken = true;
+			this.renderable.setCurrentAnimation("broken");
+		}
+		this.body.update(delta);
+
+		this._super(me.Entity, "update", [delta]);
+		return true;
+	},
+
+	onCollision: function(){
+
 	}
 
 });
