@@ -10,9 +10,12 @@ game.PlayScreen = me.ScreenObject.extend({
 		// levelDirector is telling it what to look at
 		//loading level
 
-		var player = me.pool.pull("player", 0, 0, {});
+		var player = me.pool.pull("player", 0, 420, {});
 			me.game.world.addChild(player, 5);
 		//pulling an instance of the player
+
+		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
+		me.game.world.addChild(player, 5);
 
 
 		me.input.bindKey(me.input.KEY.A, "attack");
