@@ -15,7 +15,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		//pulling an instance of the player
 
 		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
-		me.game.world.addChild(player, 5);
+		me.game.world.addChild(gamemanager, 0);
 
 
 		me.input.bindKey(me.input.KEY.A, "attack");
