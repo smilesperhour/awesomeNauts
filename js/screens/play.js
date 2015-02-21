@@ -10,9 +10,8 @@ game.PlayScreen = me.ScreenObject.extend({
 		// levelDirector is telling it what to look at
 		//loading level
 
-		var player = me.pool.pull("player", 0, 420, {});
-			me.game.world.addChild(player, 5);
-		//pulling an instance of the player
+		this.resetPlayer(0, 420);
+        
 
 		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
 		me.game.world.addChild(gamemanager, 0);
@@ -37,4 +36,9 @@ game.PlayScreen = me.ScreenObject.extend({
 		// remove the HUD from the game world
 		me.game.world.removeChild(this.HUD);
 	}
+	resetPlayer: function(x, y){
+			game.data.player = me.pool.pull("player", 0, 420, {});
+			me.game.world.addChild(game.data.player, 5);
+	}
+
 });
