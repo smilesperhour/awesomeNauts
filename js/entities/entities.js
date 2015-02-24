@@ -48,13 +48,13 @@ game.PlayerEntity = me.Entity.extend({
 	},
 
 	update: function(delta){
-
+		this.now = new Date().getTime();
 		if (this.health <= 0) {
 			this.dead = true;
-		}
+		};
 
 
-		this.now = new Date().getTime();
+		
 		//checking if the right key is pressed
 		if(me.input.isKeyPressed("right")){
 			//if the key is pressed this is what happens
@@ -394,11 +394,12 @@ game.EnemyCreep = me.Entity.extend({
 		this.lastCreep = new Date().getTime();
 
 		this.alwaysUpdate = true;
+		this.paused = false;
 	},
 			update: function(){
 				this.now = new Date().getTime();
 
-				if(game.data.player.dead{
+				if(game.data.player.dead){
 					me.game.world.removeChild(game.data.player);
 					me.state.current().resetPlayer(10, 0);
 				}
