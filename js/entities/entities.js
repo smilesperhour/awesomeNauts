@@ -11,7 +11,32 @@ game.PlayerEntity = me.Entity.extend({
 	//the numbers of the width and height of the box
 	//polygon is a method 
 	init: function(x, y, settings){
-		this._super(me.Entity, 'init', [x, y, {
+		this.setSuper();
+		this.setPlayerTimers();
+		this.setAttributes();
+
+		//choosing a velocity for the player
+		//moving 5 units to the right
+		//y is 20 so character is on the floor
+		//me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); makes it so the character is always being followed on the screen
+		this.type = "PlayerEntity";
+		this.setFlags();
+
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+
+		this.addAnimation();
+
+		//this.renderable.addAnimation adds animation(makes your character look like its walking standing or attacking) using the pictures
+		//80 miliseconds is the speed you go through each picture
+		//the number is what picture from orcSpear.png the program uses
+	
+
+		//this is the animation it starts at (facing the screen)
+		this.renderable.setCurrentAnimation("idle");
+	},
+	//
+	setSuper: function(){
+			this._super(me.Entity, 'init', [x, y, {
 			image: "player", 
 			width: 64,
 			height: 64,
@@ -21,32 +46,31 @@ game.PlayerEntity = me.Entity.extend({
 				return(new me.Rect(0, 0, 64, 64)).toPolygon();
 			}
 		}]);
+	},
 
-		//choosing a velocity for the player
-		//moving 5 units to the right
-		//y is 20 so character is on the floor
-		//me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); makes it so the character is always being followed on the screen
-		this.type = "PlayerEntity";
-		this.health = game.data.playerHealth;
-		this.body.setVelocity(game.data.playerMoveSpeed, 20);
-		this.facing = "right";
+	setPlayerTimers: function(){
 		this.now = new Date().getTime();
 		this.lastHit = this.now;
-		this.attack = game.data.playerAttack;
-		this.dead = false;
 		this.lastAttack = new Date().getTime(); //haven't used this
-		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+	},
 
-		//this.renderable.addAnimation adds animation(makes your character look like its walking standing or attacking) using the pictures
-		//80 miliseconds is the speed you go through each picture
-		//the number is what picture from orcSpear.png the program uses
-		this.renderable.addAnimation("idle", [78]);
+    setAttributes: function(){
+    	this.health = game.data.playerHealth;
+		this.body.setVelocity(game.data.playerMoveSpeed, 20);
+		this.attack = game.data.playerAttack;
+    },
+
+    setFlags: function(){
+		this.facing = "right";
+		this.dead = false;
+    },
+
+    setaddAnimation: function(){
+    	this.renderable.addAnimation("idle", [78]);
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);
 		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
+    },
 
-		//this is the animation it starts at (facing the screen)
-		this.renderable.setCurrentAnimation("idle");
-	},
 
 	update: function(delta){
 		this.now = new Date().getTime();
