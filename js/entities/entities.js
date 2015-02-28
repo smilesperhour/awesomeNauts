@@ -63,6 +63,7 @@ game.PlayerEntity = me.Entity.extend({
     setFlags: function(){
 		this.facing = "right";
 		this.dead = false;
+		this.attacking = false;
     },
 
     setaddAnimation: function(){
@@ -77,13 +78,73 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.dead = checkIfDead();
 
-		this.checkKeyPressedAndMove();
+		this.checkKeyPressesAndMove();
 
-		
+		this.setAnimation();
+
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		//delta is the change of time its happened
+		this.body.update(delta);
+
+		//calling the parent class
+		//this is updating the super class so the animations can update
+		this._super(me.Entity, "update", [delta]);
+		return true;
+	},
+
+	checkIfDead: function(){
+		if (this.health <= 0){
+			return true;
+		}
+		return false;
+	},
 
 
-		//checking if attack is pressed
-		if(me.input.isKeyPressed("attack")){
+checkKeyPressesAndMove: function(){
+			//checking if the right key is pressed
+		if(me.input.isKeyPressed("right")){
+			this.moveRight();
+		}
+		//if you stop pressing the right key
+		else if (me.input.isKeyPressed("left")){
+			this.moveLeft();
+		}
+		else{
+			//it wont move
+			this.body.vel.x = 0;
+		}
+
+		if(me.input.isKeyPressed("jump") && !this.body.falling && !this.body.jumping){
+			this.jump();
+		} 
+
+		this.attacking = me.input.isKeyPressed("attack")
+
+},
+
+moveRight: function(){
+		//if the key is pressed this is what happens
+		//adds the position of my x by the velocity defined above in
+		//setVelocity() and multiplying it by me.timer.tick
+		//me.timer.tick makes the movement look smooth
+		this.body.vel.x += this.body.accel.x * me.timer.tick;			//this is so the character faces the right when moving to the right (if this isnt here the character faces the left when walking to the right)
+		this.facing = "right";
+		this.flipX(true);
+},
+
+moveLeft: function(){
+		this.facing = "left";
+		this.body.vel.x -=this.body.accel.x * me.timer.tick;
+		this.flipX(false);
+},
+
+jump: function(){
+		this.body.jumping = true;
+		this.body.vel.y -= this.body.accel.y * me.timer.tick;
+},
+
+setAnimation: function(){
+	if(this.attacking){
 			//runs if your not attacking
 			if(!this.renderable.isCurrentAnimation("attack")){
 				//sets the current animation to attack and once that is over
@@ -110,65 +171,6 @@ game.PlayerEntity = me.Entity.extend({
 		else if(!this.renderable.isCurrentAnimation("attack")){
 			this.renderable.setCurrentAnimation("idle");
 		}
-
-
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
-		//delta is the change of time its happened
-		this.body.update(delta);
-
-
-		//calling the parent class
-		//this is updating the super class so the animations can update
-		this._super(me.Entity, "update", [delta]);
-		return true;
-	},
-
-	checkIfDead: function(){
-		if (this.health <= 0){
-			return true;
-		}
-		return false;
-	},
-
-
-checkKeyPressedAndMove: function(){
-			//checking if the right key is pressed
-		if(me.input.isKeyPressed("right")){
-			this.moveRight();
-		}
-		//if you stop pressing the right key
-		else if (me.input.isKeyPressed("left")){
-			this.moveLeft();
-		}
-		else{
-			//it wont move
-			this.body.vel.x = 0;
-		}
-
-		if(me.input.isKeyPressed("jump") && !this.body.falling && !this.body.jumping){
-			this.jump();
-		} 
-},
-
-moveRight: function(){
-		//if the key is pressed this is what happens
-		//adds the position of my x by the velocity defined above in
-		//setVelocity() and multiplying it by me.timer.tick
-		//me.timer.tick makes the movement look smooth
-		this.body.vel.x += this.body.accel.x * me.timer.tick;			//this is so the character faces the right when moving to the right (if this isnt here the character faces the left when walking to the right)
-		this.facing = "right";
-		this.flipX(true);
-},
-
-moveLeft: function(){
-		this.facing = "left";
-		this.body.vel.x -=this.body.accel.x * me.timer.tick;
-		this.flipX(false);
-},
-
-jump: function(){
-		this.body.jumping = true;
-		this.body.vel.y -= this.body.accel.y * me.timer.tick;
 },
 
 
