@@ -29,6 +29,7 @@ var game = {
 		exp2: 0,
 		exp3: 0,
 		exp4: 0,
+		win: ""
 
 	},
 	
@@ -69,8 +70,8 @@ var game = {
 		// POOL is a technique that might speed up the game if used properly
 		me.pool.register("EnemyCreep", game.EnemyCreep, true);
 		me.pool.register("GameTimerManager", game.GameTimerManager);
-		me.pool.register("heroDeathManager", game.heroDeathManager);
-
+		me.pool.register("ExperienceManager", game.ExperienceManager);
+		me.pool.register("", game.heroDeathManager);
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 
