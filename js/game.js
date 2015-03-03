@@ -49,6 +49,8 @@ var game = {
 		});
 	}
 
+	me.save.add({exp: 0, exp1: 0, exp2: 0, exp3: 0, exp4: 0});
+
 	// Initialize the audio.
 	me.audio.init("mp3,ogg");
 
@@ -71,7 +73,7 @@ var game = {
 		me.pool.register("EnemyCreep", game.EnemyCreep, true);
 		me.pool.register("GameTimerManager", game.GameTimerManager);
 		me.pool.register("ExperienceManager", game.ExperienceManager);
-		me.pool.register("", game.heroDeathManager);
+		me.pool.register("HeroDeathManager", game.HeroDeathManager);
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 
