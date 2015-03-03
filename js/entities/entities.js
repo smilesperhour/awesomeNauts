@@ -11,7 +11,7 @@ game.PlayerEntity = me.Entity.extend({
 	//the numbers of the width and height of the box
 	//polygon is a method 
 	init: function(x, y, settings){
-		this.setSuper();
+		this.setSuper(x, y);
 		this.setPlayerTimers();
 		this.setAttributes();
 
@@ -35,7 +35,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.renderable.setCurrentAnimation("idle");
 	},
 	//
-	setSuper: function(){
+	setSuper: function(x, y){
 			this._super(me.Entity, 'init', [x, y, {
 			image: "player", 
 			width: 64,
@@ -66,7 +66,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.attacking = false;
     },
 
-    setaddAnimation: function(){
+    addAnimation: function(){
     	this.renderable.addAnimation("idle", [78]);
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);
 		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
@@ -76,7 +76,7 @@ game.PlayerEntity = me.Entity.extend({
 	update: function(delta){
 		this.now = new Date().getTime();
 
-		this.dead = checkIfDead();
+		this.dead = this.checkIfDead();
 
 		this.checkKeyPressesAndMove();
 
@@ -215,7 +215,10 @@ setAnimation: function(){
 			var ydif = this.pos.y - response.b.pos.y;
 
 			this.stopMovement(xdif, ydif);
-			this.hitCreep(response);
+
+			if(this.checkAttack(xdif, ydif)) {
+				this.hitCreep(response);
+			
 			};
 
 		},
@@ -245,7 +248,7 @@ setAnimation: function(){
 		},
 
 		hitCreep: function(response){
-			if(this.checkAttack(xdif, ydif)){
+			
 				if(response.b.health <= game.data.playerAttack){
 				//adds one gold for a creep kill
 				game.data.gold += 1;
