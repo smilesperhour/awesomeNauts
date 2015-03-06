@@ -38,7 +38,7 @@ game.EnemyCreep = me.Entity.extend({
 		}
 
 		this.now = new Date() .getTime();
-
+																					//making the creep jump 
 		//if(this.body.vel.x == 0 && !this.body.jumping && !this.body.falling){
 			//this.body.jumping = true;
 			//this.body.vel.y -= this.body.accel.y * me.timer.tick;
