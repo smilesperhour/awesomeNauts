@@ -5,7 +5,6 @@
 		this.lastCreep = new Date().getTime();
 		this.paused = false;
 		this.alwaysUpdate = true;
-		this.paused = false;
 	},
 			update: function(){
 				this.now = new Date().getTime();
@@ -76,6 +75,20 @@
 			this.gameover = true;
 			me.save.exp = game.data.exp;
 			me.save.exp2 = 4;
+		}
+
+	});
+
+	game.SpendGold = Object.extend({
+		init: function(x, y, settings){
+			this.now = new Date().getTime();
+			this.lastBuy = new Date().getTime();
+			this.paused = false;
+			this.alwaysUpdate = true;
+		},
+
+		update: function(){
+			return true;
 		}
 
 	});
