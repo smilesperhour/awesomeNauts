@@ -37,10 +37,10 @@
 		}		
 		else {
 			// Echoes to the user that his given information wasn't correct
-			echo "<p>Invalid username and password</p>";
+			echo "Invalid username and password";
 		}
 	}
 	else {
 		// Echoes to the user that his given information wasn't correct
-		echo "<p>Invalid username and password</p>";
+		echo "Invalid username and password";
 	}
