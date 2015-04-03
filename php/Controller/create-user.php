@@ -18,7 +18,7 @@
 	// Created a query and it will insert into the table called users
 	$query = $_SESSION["connection"]->query("INSERT INTO users SET "
 			// Sets Email to Email variable
-			. "email = '$email',"
+			. "email = '',"
 			// Sets Username to Username variable
 			. "username = '$username',"
 			// Sets Password to the hashedPassword variable
