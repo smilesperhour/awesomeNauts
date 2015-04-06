@@ -15,6 +15,7 @@ game.resources = [
 	 {name: "minimap", type:"image", src: "data/img/minimap.png"},
 	 {name: "load-screen", type:"image", src: "data/img/loadpic.png"},
 	 {name: "new-screen", type:"image", src: "data/img/newpic.png"},
+	 {name: "spear", type:"image", src: "data/img/spear.png"},
 
 
 
@@ -29,6 +30,10 @@ game.resources = [
 	 * {name: "example01", type: "tmx", src: "data/map/example01.json"},
  	 */
  	 {name: "level01", type: "tmx", src: "data/map/test.tmx"},
+
+ 	  {name: "level01", type: "tmx", src: "data/map/test.tmx"},
+ 	  {name: "level01", type: "tmx", src: "data/map/test.tmx"},
+ 	  {name: "blankSpace", type: "tmx", src: "data/bgm/"},
 
 
 	/* Background music. 

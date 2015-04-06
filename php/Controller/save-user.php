@@ -12,7 +12,7 @@ $query = $_SESSION["connection"]->("UPDATE users SET "
 	. "exp1 = $exp1, "
 	. "exp2 = $exp2, "
 	. "exp3 = $exp3, "
-	. "exp4 = $exp4, " WHERE username = \"" . $_SESSION["name"]. "\"");
+	. "exp4 = $exp4 WHERE username = \"" . $_SESSION["name"]. "\"");
 
 if($query){
 	echo "true"; 

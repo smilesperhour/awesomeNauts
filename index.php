@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <?php
-	require_once("php/controller/create-db.php");
+	require_once("php/Controller/create-db.php");
 ?>
 
 <html>
@@ -102,8 +102,8 @@
 				type: "POST", 
 				url: "php/controller/create-user.php",
 				data: {
-					username: $('#username') .val(),
-					password: $('#password') .val(),
+					username: $('#username').val(),
+					password: $('#password').val(),
 				},
 				dataType: "text"
 			})
@@ -124,8 +124,8 @@
 				type: "POST", 
 				url: "php/controller/login-user.php",
 				data: {
-					username: $('#username') .val(),
-					password: $('#password') .val(),
+					username: $('#username').val(),
+					password: $('#password').val(),
 				},
 				dataType: "text"
 			})
