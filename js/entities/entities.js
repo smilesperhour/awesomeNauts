@@ -158,10 +158,10 @@ if (me.input.isKeyPressed("skill1")){
 },
 
 throwSpear: function(){
-	if(this.lastSpear >= game.data.spearTimer && game.data.ability3 >= 0){
+	if(this.now-this.lastSpear >= game.data.spearTimer*100 && game.data.ability3 > 0){
 		this.lastSpear = this.now;
-		var spear = me.pool.pull("spear", this.pos.x, this.pos.y, {});
-		me.game.world.addChild(creepe, 5);	
+		var spear = me.pool.pull("spear", this.pos.x, this.pos.y, {}, this.facing);
+		me.game.world.addChild(spear, 10);	
 	}
 },
 
@@ -198,7 +198,7 @@ setAnimation: function(){
 
 	loseHealth: function(damage){
 		this.health = this.health - damage;
-		console.log(this.health);
+		
 	},
 
 	collideHandler: function(response){

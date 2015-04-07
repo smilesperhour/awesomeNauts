@@ -48,7 +48,7 @@ game.SpendGold = Object.extend({
 		 game.data.buytext = new (me.Renderable.extend({
 
 		 	init: function(){
-		 		console.log("init");
+		 		
 		 		this._super(me.Renderable, 'init', [game.data.pausePos.x, game.data.pausePos.y, 300, 50]);
 		 		this.font = new me.Font("Arial", 26, "white");
 		 		this.updateWhenPaused = true;
@@ -114,18 +114,18 @@ game.SpendGold = Object.extend({
 			}
 		},
 
-		checkCost: function(skill1){
+		checkCost: function(skill){
 			if(skill===1 && (game.data.gold >= ((game.data.skill1+1)*10))){
 				return true;
-			}		else if(skill===2 && (game.data.gold >= ((game.data.skill2+1)*10))){
+			}		else if(skill===2 && (game.data.gold >= ((game.data.skill2+1)*10))) {
 				return true;
-			}		else if(skill===3 && (game.data.gold >= ((game.data.skill3+1)*10))){
+			}		else if(skill===3 && (game.data.gold >= ((game.data.skill3+1)*10))) {
 				return true;
-			}			  else if(skill===4 && (game.data.gold >= ((game.data.ability1+1)*10))){
+			}		else if(skill===4 && (game.data.gold >= ((game.data.ability1+1)*10))) {
 				return true;
 			}		else if(skill===5 && (game.data.gold >= ((game.data.ability2+1)*10))){
 				return true;
-			}			else if(skill===6 && (game.data.gold >= ((game.data.ability3+1)*10))){
+			}			else if(skill===6 && (game.data.gold >= ((game.data.ability3+1)*10))) {
 				return true;
 			}else{
 				return false;

@@ -5,6 +5,7 @@ game.PlayScreen = me.ScreenObject.extend({
 	onResetEvent: function() {
 		// reset the score
 		game.data.score = 0;
+		game.data.win = "";
 		me.levelDirector.loadLevel("level01");
 
 		// levelDirector is telling it what to look at
@@ -28,6 +29,9 @@ game.PlayScreen = me.ScreenObject.extend({
 		var spendGold = me.pool.pull("SpendGold", 0, 0, {});
 		me.game.world.addChild(spendGold, 0);
 
+		game.data.minimap = me.pool.pull("minimap", 10, 10, {});
+		me.game.world.addChild(game.data.minimap, 30);
+
 		me.input.bindKey(me.input.KEY.B, "buy");
 		me.input.bindKey(me.input.KEY.Q, "skill1");
 		me.input.bindKey(me.input.KEY.W, "skill2");
@@ -41,7 +45,8 @@ game.PlayScreen = me.ScreenObject.extend({
 		// add our HUD to the game world
 		this.HUD = new game.HUD.Container();
 		me.game.world.addChild(this.HUD);
-		me.audio.playTrack("blankSpace")
+
+		me.audio.playTrack("beauty");
 	},
 
 
@@ -54,7 +59,10 @@ game.PlayScreen = me.ScreenObject.extend({
 	},
 	resetPlayer: function(x, y){
 			game.data.player = me.pool.pull("player", x, y, {});
-			me.game.world.addChild(game.data.player, 5);
+			me.game.world.addChild(game.data.player, 7);
+
+		game.data.miniPlayer = me.pool.pull("miniplayer", 10, 10, {});
+		me.game.world.addChild(game.data.miniPlayer, 31);
 	}
 
 });

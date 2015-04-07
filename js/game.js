@@ -6,9 +6,11 @@ var game = {
 	data : {
 		// score
 		score : 0,
+		option1: "",
+		option2: "",
 		enemyBaseHealth: 1,
 		playerBaseHealth: 1,
-		enemyCreepHealth: 10,
+		enemyCreepHealth: 1,
 		playerHealth: 15,
 		enemyCreepAttack: 1,
 		playerAttack: 2,
@@ -25,7 +27,7 @@ var game = {
 		spearTimer: 15,
 		player: "",
 		exp: 0,
-		gold: 0,
+		gold: 100,
 		ability1: 0,
 		ability2: 0,
 		ability3: 0,
@@ -39,7 +41,9 @@ var game = {
 		win: "",
 		pausePos: "",
 		buyscreen: "",
-		buytext: ""
+		buytext: "",
+		minimap: "",
+		miniPlayer: ""
 
 	},
 	
@@ -88,8 +92,12 @@ var game = {
 		me.pool.register("GameTimerManager", game.GameTimerManager);
 		me.pool.register("ExperienceManager", game.ExperienceManager);
 		me.pool.register("HeroDeathManager", game.HeroDeathManager);
+		me.pool.register("Gloop", game.Gloop, true);
 		me.pool.register("SpendGold", game.SpendGold);
-		me.pool.register("spear", game.SpendThrow);
+		me.pool.register("spear", game.SpearThrow, true);
+		me.pool.register("minimap", game.MiniMap, true);
+		me.pool.register("miniplayer", game.MiniPlayerLocation, true);
+
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 		me.state.set(me.state.SPENDEXP, new game.SpendExp());

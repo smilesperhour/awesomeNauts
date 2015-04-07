@@ -17,7 +17,7 @@
 			goldTimerCheck: function(){
 					if(Math.round(this.now/1000) % 20 ===0 && (this.now - this.lastCreep >= 1000)){
 					game.data.gold += (game.data.exp1+1);
-					console.log("Current gold: " + game.data.gold);
+				
 				}
 			},
 
@@ -26,6 +26,9 @@
 					this.lastCreep = this.now;
 					var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
 					me.game.world.addChild(creepe, 5);
+
+					var creepe2 = me.pool.pull("Gloop", 1000, 0, {});
+					me.game.world.addChild(creepe2, 5);
 				}
 			}
 
