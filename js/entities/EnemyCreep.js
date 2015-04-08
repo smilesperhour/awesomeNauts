@@ -19,7 +19,7 @@ game.EnemyCreep = me.Entity.extend({
 		//keeps track of thr last time our creep hits something.
 		this.lastHit = new Date().getTime();
 		this.now = new Date().getTime();
-		this.body.setVelocity(3,20);
+		this.body.setVelocity(3,30);
 
 		this.type = "EnemyCreep";
 
@@ -38,12 +38,14 @@ game.EnemyCreep = me.Entity.extend({
 		}
 
 		this.now = new Date() .getTime();
-																					//making the creep jump 
-		//if(this.body.vel.x == 0 && !this.body.jumping && !this.body.falling){
-			//this.body.jumping = true;
-			//this.body.vel.y -= this.body.accel.y * me.timer.tick;
+
+		var xdif = this.pos.x;
+	 //creep jumping 
+		if(xdif === 631 &&this.body.vel.x == 0 && !this.body.jumping && !this.body.falling){
+			this.body.jumping = true;
+			this.body.vel.y -= this.body.accel.y * me.timer.tick;
 			
-		//}
+		}
 
 		this.body.vel.x -= this.body.accel.x * me.timer.tick;
 

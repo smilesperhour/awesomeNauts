@@ -14,7 +14,7 @@ game.PlayScreen = me.ScreenObject.extend({
 
 		//console.log(game.data.exp);
 
-		this.resetPlayer(0, 420);
+		this.resetPlayer(10, 0, 420);
         
 
 		var gameTimerManager = me.pool.pull("GameTimerManager", 0, 0, {});
