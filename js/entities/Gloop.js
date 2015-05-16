@@ -23,7 +23,7 @@ game.Gloop = me.Entity.extend({//code for the enemycreep to be on webstie
 
 		this.type ="gloop";
 	
-		this.renderable.addAnimation("walk", [3, 4, 5], 80);
+		this.renderable.addAnimation("walk", [0, 1, 2, 3, 4], 80);
 		this.renderable.setCurrentAnimation("walk");	
 	},
 

@@ -36,7 +36,7 @@ game.resources = [
  	  {name: "level01", type: "tmx", src: "data/map/test.tmx"},
  	  {name: "level01", type: "tmx", src: "data/map/test.tmx"},
  	  
- 	  {name: "beauty", type: "audio", src: "data/bgm/"}
+ 	  {name: "Darude", type: "audio", src: "data/bgm/"}
 
 
 	/* Background music. 
